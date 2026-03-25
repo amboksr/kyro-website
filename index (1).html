@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Kyro — Think Smarter</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+--bg:#08090d;
+--bg2:#0e1017;
+--bg3:#13151e;
+--surface:#1a1d28;
+--surface2:#21253a;
+--border:#ffffff12;
+--border2:#ffffff22;
+--accent:#4f8fff;
+--accent2:#7eb3ff;
+--accent3:#c4dcff;
+--gold:#e8b84b;
+--gold2:#f5d07a;
+--text:#f0f2ff;
+--text2:#9da3bf;
+--text3:#5c6180;
+--danger:#ff5e5e;
+--success:#3ecf8e;
+--radius:12px;
+--radius2:20px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 2rem;height:64px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);background:rgba(8,9,13,0.85);backdrop-filter:blur(20px)}
+.logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.3rem;letter-spacing:-0.02em;background:linear-gradient(135deg,#fff 40%,var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.logo span{color:var(--accent)}
+.nav-links{display:flex;gap:2rem;align-items:center}
+.nav-links a{color:var(--text2);text-decoration:none;font-size:.9rem;font-weight:400;transition:color .2s}
+.nav-links a:hover{color:var(--text)}
+.nav-cta{display:flex;gap:.75rem}
+.btn{padding:.5rem 1.25rem;border-radius:var(--radius);font-family:'DM Sans',sans-serif;font-size:.9rem;font-weight:500;cursor:pointer;transition:all .2s;border:none}
+.btn-ghost{background:transparent;color:var(--text2);border:1px solid var(--border2)}
+.btn-ghost:hover{background:var(--surface);color:var(--text)}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{background:var(--accent2);transform:translateY(-1px)}
+.btn-gold{background:var(--gold);color:#1a1000;font-weight:600}
+.btn-gold:hover{background:var(--gold2);transform:translateY(-1px)}
+.btn-lg{padding:.75rem 2rem;font-size:1rem;border-radius:var(--radius2)}
+.btn-xl{padding:.9rem 2.5rem;font-size:1.05rem;border-radius:var(--radius2)}
+
+/* ── VIEWS ── */
+.view{display:none}
+.view.active{display:block}
+#chat-view{display:none;flex-direction:column;height:100vh;padding-top:64px}
+#chat-view.active{display:flex}
+
+/* ── HERO ── */
+#landing{padding-top:64px}
+.hero{position:relative;min-height:calc(100vh - 64px);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:4rem 2rem;overflow:hidden}
+.hero-bg{position:absolute;inset:0;pointer-events:none}
+.orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:.35}
+.orb1{width:600px;height:600px;background:radial-gradient(circle,#1a3dff55,transparent 70%);top:-200px;left:-100px;animation:drift 12s ease-in-out infinite}
+.orb2{width:500px;height:500px;background:radial-gradient(circle,#4f8fff33,transparent 70%);bottom:-150px;right:-50px;animation:drift 15s ease-in-out infinite reverse}
+.orb3{width:300px;height:300px;background:radial-gradient(circle,#e8b84b22,transparent 70%);top:40%;left:60%;animation:drift 10s ease-in-out infinite 3s}
+@keyframes drift{0%,100%{transform:translate(0,0)}33%{transform:translate(30px,-20px)}66%{transform:translate(-20px,30px)}}
+.grid-lines{position:absolute;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse 80% 60% at 50% 50%,black,transparent)}
+.badge{display:inline-flex;align-items:center;gap:.5rem;padding:.35rem 1rem;border:1px solid var(--accent)44;background:var(--accent)11;border-radius:99px;font-size:.8rem;color:var(--accent2);margin-bottom:2rem;animation:fadeUp .6s ease both}
+.badge-dot{width:6px;height:6px;border-radius:50%;background:var(--success);box-shadow:0 0 8px var(--success)}
+h1{font-family:'Syne',sans-serif;font-size:clamp(3rem,7vw,5.5rem);font-weight:800;line-height:1.05;letter-spacing:-0.04em;animation:fadeUp .7s ease .1s both}
+h1 .line2{display:block;background:linear-gradient(90deg,var(--accent),var(--accent2),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero-sub{max-width:540px;color:var(--text2);font-size:1.1rem;line-height:1.7;margin:1.5rem auto 2.5rem;font-weight:300;animation:fadeUp .7s ease .2s both}
+.hero-ctas{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;animation:fadeUp .7s ease .3s both}
+.hero-stats{display:flex;gap:3rem;justify-content:center;margin-top:4rem;animation:fadeUp .7s ease .4s both}
+.stat{text-align:center}
+.stat-n{font-family:'Syne',sans-serif;font-size:2rem;font-weight:700;color:var(--text)}
+.stat-l{font-size:.8rem;color:var(--text3);margin-top:.2rem;text-transform:uppercase;letter-spacing:.1em}
+.hero-preview{margin-top:3rem;width:100%;max-width:800px;border-radius:var(--radius2);border:1px solid var(--border2);overflow:hidden;background:var(--bg2);box-shadow:0 40px 120px rgba(0,0,0,.8);animation:fadeUp .8s ease .5s both}
+.preview-bar{padding:.75rem 1rem;background:var(--bg3);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.5rem}
+.dot{width:10px;height:10px;border-radius:50%}
+.preview-msgs{padding:1.5rem}
+.preview-msg{display:flex;gap:.75rem;margin-bottom:1.25rem;animation:fadeUp .5s ease both}
+.avatar{width:32px;height:32px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:600}
+.av-user{background:var(--surface2);color:var(--accent2)}
+.av-ai{background:linear-gradient(135deg,var(--accent),#8b5cf6);color:#fff;font-size:.7rem}
+.msg-bubble{background:var(--surface);border-radius:var(--radius);padding:.75rem 1rem;font-size:.9rem;line-height:1.6;color:var(--text2);max-width:80%;position:relative}
+.msg-bubble.user-msg{background:var(--accent)22;border:1px solid var(--accent)33;color:var(--text)}
+.typing{display:flex;gap:4px;padding:.25rem 0}
+.typing span{width:6px;height:6px;border-radius:50%;background:var(--accent2);animation:bounce .8s ease infinite}
+.typing span:nth-child(2){animation-delay:.1s}
+.typing span:nth-child(3){animation-delay:.2s}
+@keyframes bounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-6px)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── FEATURES ── */
+.section{padding:6rem 2rem;max-width:1100px;margin:0 auto}
+.section-label{font-size:.8rem;text-transform:uppercase;letter-spacing:.15em;color:var(--accent);margin-bottom:1rem}
+.section-title{font-family:'Syne',sans-serif;font-size:clamp(2rem,4vw,3rem);font-weight:700;letter-spacing:-0.03em;line-height:1.1}
+.section-sub{color:var(--text2);font-size:1rem;line-height:1.7;margin-top:.75rem;max-width:500px;font-weight:300}
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;margin-top:3rem}
+.feat-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius2);padding:1.75rem;transition:all .3s;position:relative;overflow:hidden}
+.feat-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--accent)08,transparent);opacity:0;transition:opacity .3s}
+.feat-card:hover{border-color:var(--border2);transform:translateY(-3px)}
+.feat-card:hover::before{opacity:1}
+.feat-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:1.25rem}
+.fi-blue{background:var(--accent)22;border:1px solid var(--accent)33}
+.fi-gold{background:var(--gold)22;border:1px solid var(--gold)33}
+.fi-green{background:#3ecf8e22;border:1px solid #3ecf8e33}
+.fi-purple{background:#8b5cf622;border:1px solid #8b5cf633}
+.fi-coral{background:#ff6b6b22;border:1px solid #ff6b6b33}
+.fi-teal{background:#2dd4bf22;border:1px solid #2dd4bf33}
+.feat-title{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:600;margin-bottom:.5rem}
+.feat-desc{color:var(--text2);font-size:.9rem;line-height:1.6;font-weight:300}
+
+/* ── PRICING ── */
+.pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;margin-top:3rem}
+.plan-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius2);padding:2rem;transition:all .3s;position:relative}
+.plan-card.popular{border-color:var(--accent)66;background:linear-gradient(160deg,var(--accent)08,var(--bg2))}
+.plan-badge{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;font-size:.75rem;font-weight:600;padding:.3rem 1rem;border-radius:99px;white-space:nowrap}
+.plan-name{font-family:'Syne',sans-serif;font-size:1rem;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.1em}
+.plan-price{font-family:'Syne',sans-serif;font-size:3rem;font-weight:800;letter-spacing:-0.04em;margin:.5rem 0 .25rem;line-height:1}
+.plan-price span{font-size:1rem;font-weight:400;color:var(--text3)}
+.plan-desc{color:var(--text2);font-size:.85rem;margin-bottom:1.5rem;font-weight:300}
+.plan-features{list-style:none;display:flex;flex-direction:column;gap:.6rem;margin-bottom:2rem}
+.plan-features li{font-size:.9rem;color:var(--text2);display:flex;align-items:center;gap:.5rem}
+.plan-features li::before{content:'✓';color:var(--success);font-weight:600;font-size:.85rem}
+.plan-features li.no::before{content:'✗';color:var(--text3)}
+.plan-features li.no{color:var(--text3)}
+
+/* ── HOW IT WORKS ── */
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:2rem;margin-top:3rem;position:relative}
+.step{text-align:center;padding:1.5rem}
+.step-num{font-family:'Syne',sans-serif;font-size:3rem;font-weight:800;color:var(--accent)22;line-height:1}
+.step-title{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:600;margin:.5rem 0 .5rem}
+.step-desc{color:var(--text2);font-size:.9rem;font-weight:300;line-height:1.6}
+
+/* ── CTA SECTION ── */
+.cta-section{padding:6rem 2rem;text-align:center;position:relative;overflow:hidden}
+.cta-inner{max-width:700px;margin:0 auto;position:relative;z-index:1}
+.cta-glow{position:absolute;inset:-50%;background:radial-gradient(ellipse 60% 40% at 50% 50%,var(--accent)15,transparent);pointer-events:none}
+
+/* ── FOOTER ── */
+footer{border-top:1px solid var(--border);padding:2rem;text-align:center;color:var(--text3);font-size:.85rem}
+footer a{color:var(--text3);text-decoration:none}
+footer a:hover{color:var(--text2)}
+
+/* ── CHAT ── */
+.chat-layout{display:flex;flex:1;overflow:hidden}
+.sidebar{width:260px;flex-shrink:0;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
+.sidebar-head{padding:1rem;border-bottom:1px solid var(--border)}
+.new-chat-btn{width:100%;padding:.7rem 1rem;background:var(--accent)15;border:1px solid var(--accent)33;border-radius:var(--radius);color:var(--accent2);font-family:'DM Sans',sans-serif;font-size:.9rem;cursor:pointer;transition:all .2s;text-align:left;display:flex;align-items:center;gap:.5rem}
+.new-chat-btn:hover{background:var(--accent)25}
+.sidebar-body{flex:1;overflow-y:auto;padding:.75rem}
+.chat-history-item{padding:.6rem .75rem;border-radius:var(--radius);cursor:pointer;font-size:.85rem;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:all .2s}
+.chat-history-item:hover{background:var(--surface);color:var(--text)}
+.chat-history-item.active{background:var(--surface2);color:var(--text)}
+.sidebar-foot{padding:1rem;border-top:1px solid var(--border)}
+.user-info{display:flex;align-items:center;gap:.75rem}
+.user-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#8b5cf6);display:flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:600;color:#fff;flex-shrink:0}
+.user-meta{flex:1;overflow:hidden}
+.user-name{font-size:.9rem;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.user-plan{font-size:.75rem;color:var(--accent2)}
+.upgrade-btn-small{padding:.3rem .75rem;font-size:.75rem;background:var(--gold)22;border:1px solid var(--gold)44;color:var(--gold2);border-radius:99px;cursor:pointer;white-space:nowrap;font-family:'DM Sans',sans-serif;transition:all .2s}
+.upgrade-btn-small:hover{background:var(--gold)33}
+
+.chat-main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.chat-header{padding:1rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.model-selector{display:flex;align-items:center;gap:.5rem;padding:.4rem .75rem;background:var(--surface);border-radius:var(--radius);font-size:.85rem;cursor:pointer;border:1px solid var(--border);transition:all .2s}
+.model-selector:hover{border-color:var(--border2)}
+.model-dot{width:8px;height:8px;border-radius:50%;background:var(--success)}
+.chat-messages{flex:1;overflow-y:auto;padding:2rem 1.5rem;display:flex;flex-direction:column;gap:1.5rem;scroll-behavior:smooth}
+.chat-messages::-webkit-scrollbar{width:4px}
+.chat-messages::-webkit-scrollbar-track{background:transparent}
+.chat-messages::-webkit-scrollbar-thumb{background:var(--border2);border-radius:99px}
+.msg-row{display:flex;gap:1rem;max-width:800px;width:100%;margin:0 auto}
+.msg-row.user{flex-direction:row-reverse}
+.msg-av{width:36px;height:36px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:600}
+.msg-av.ai{background:linear-gradient(135deg,var(--accent),#8b5cf6);color:#fff}
+.msg-av.user{background:var(--surface2);color:var(--text2)}
+.msg-content{flex:1}
+.msg-sender{font-size:.8rem;color:var(--text3);margin-bottom:.4rem;font-weight:500}
+.msg-text{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.25rem;font-size:.95rem;line-height:1.7;color:var(--text);white-space:pre-wrap;word-wrap:break-word}
+.msg-row.user .msg-text{background:var(--accent)15;border-color:var(--accent)33;color:var(--text)}
+.msg-row.user .msg-sender{text-align:right}
+.msg-actions{display:flex;gap:.5rem;margin-top:.5rem}
+.msg-action-btn{background:none;border:none;color:var(--text3);cursor:pointer;font-size:.8rem;padding:.25rem .5rem;border-radius:6px;transition:all .2s}
+.msg-action-btn:hover{background:var(--surface);color:var(--text2)}
+.typing-indicator{display:flex;gap:4px;align-items:center;padding:.5rem 0}
+.typing-indicator span{width:7px;height:7px;border-radius:50%;background:var(--accent2);opacity:.6;animation:bounce .8s ease infinite}
+.typing-indicator span:nth-child(2){animation-delay:.15s}
+.typing-indicator span:nth-child(3){animation-delay:.3s}
+.welcome-screen{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem}
+.welcome-logo{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;background:linear-gradient(135deg,#fff 40%,var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:.5rem}
+.welcome-sub{color:var(--text2);font-size:1rem;font-weight:300;margin-bottom:2.5rem}
+.suggestions{display:grid;grid-template-columns:repeat(2,1fr);gap:.75rem;max-width:600px;width:100%}
+.suggestion-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.25rem;cursor:pointer;text-align:left;transition:all .2s}
+.suggestion-card:hover{border-color:var(--border2);transform:translateY(-2px)}
+.sug-title{font-size:.9rem;font-weight:500;margin-bottom:.25rem}
+.sug-desc{font-size:.8rem;color:var(--text3);font-weight:300}
+.chat-input-area{padding:1rem 1.5rem 1.5rem;flex-shrink:0}
+.input-wrapper{max-width:800px;margin:0 auto;position:relative}
+.input-box{width:100%;background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius2);padding:1rem 3.5rem 1rem 1.25rem;font-family:'DM Sans',sans-serif;font-size:.95rem;color:var(--text);resize:none;outline:none;min-height:54px;max-height:200px;line-height:1.6;transition:border-color .2s;overflow-y:auto}
+.input-box:focus{border-color:var(--accent)66}
+.input-box::placeholder{color:var(--text3)}
+.send-btn{position:absolute;right:.75rem;bottom:.75rem;width:36px;height:36px;border-radius:10px;background:var(--accent);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.send-btn:hover{background:var(--accent2)}
+.send-btn:disabled{background:var(--surface);cursor:not-allowed}
+.send-icon{width:18px;height:18px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.input-meta{display:flex;align-items:center;justify-content:space-between;margin-top:.5rem;padding:0 .25rem}
+.input-hint{font-size:.75rem;color:var(--text3)}
+.limit-indicator{font-size:.75rem;color:var(--text3)}
+.limit-indicator.warn{color:var(--gold)}
+.limit-indicator.danger{color:var(--danger)}
+
+/* ── MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(8px);z-index:200;display:flex;align-items:center;justify-content:center;padding:1.5rem;opacity:0;pointer-events:none;transition:opacity .3s}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal{background:var(--bg2);border:1px solid var(--border2);border-radius:24px;width:100%;max-width:900px;max-height:90vh;overflow-y:auto;padding:2.5rem;transform:scale(.95);transition:transform .3s}
+.modal-overlay.open .modal{transform:scale(1)}
+.modal-head{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:2rem}
+.modal-close{background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text2);cursor:pointer;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;transition:all .2s}
+.modal-close:hover{background:var(--surface2);color:var(--text)}
+
+/* ── AUTH MODAL ── */
+.auth-modal{max-width:440px}
+.auth-tabs{display:flex;gap:.5rem;margin-bottom:2rem;background:var(--surface);border-radius:var(--radius);padding:.25rem}
+.auth-tab{flex:1;padding:.6rem;text-align:center;border-radius:8px;cursor:pointer;font-size:.9rem;color:var(--text2);transition:all .2s}
+.auth-tab.active{background:var(--bg2);color:var(--text)}
+.auth-form{display:flex;flex-direction:column;gap:1rem}
+.form-group{display:flex;flex-direction:column;gap:.4rem}
+.form-label{font-size:.85rem;color:var(--text2)}
+.form-input{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);padding:.75rem 1rem;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.95rem;outline:none;transition:border-color .2s}
+.form-input:focus{border-color:var(--accent)66}
+.form-input::placeholder{color:var(--text3)}
+.divider{display:flex;align-items:center;gap:.75rem;color:var(--text3);font-size:.85rem}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
+.social-btn{width:100%;padding:.7rem;background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);color:var(--text2);font-family:'DM Sans',sans-serif;font-size:.9rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:.5rem;transition:all .2s}
+.social-btn:hover{background:var(--surface2);color:var(--text)}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:99px}
+
+/* ── RESPONSIVE ── */
+@media(max-width:768px){
+.nav-links{display:none}
+.sidebar{width:0;display:none}
+.suggestions{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">Kyro<span>AI</span></div>
+  <div class="nav-links">
+    <a href="#features">Features</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#how">How it works</a>
+  </div>
+  <div class="nav-cta">
+    <button class="btn btn-ghost" onclick="openAuth('login')">Log in</button>
+    <button class="btn btn-primary" onclick="openAuth('signup')">Get started</button>
+  </div>
+</nav>
+
+<!-- LANDING -->
+<div id="landing" class="view active">
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg">
+      <div class="orb orb1"></div>
+      <div class="orb orb2"></div>
+      <div class="orb orb3"></div>
+      <div class="grid-lines"></div>
+    </div>
+    <div class="badge">
+      <div class="badge-dot"></div>
+      Now powered by Claude Sonnet — smarter than ever
+    </div>
+    <h1>
+      Your AI that actually<br>
+      <span class="line2">understands you.</span>
+    </h1>
+    <p class="hero-sub">Kyro combines cutting-edge language models with an elegant interface — write, code, analyze, create. No limits, just intelligence.</p>
+    <div class="hero-ctas">
+      <button class="btn btn-primary btn-xl" onclick="openAuth('signup')">Start for free →</button>
+      <button class="btn btn-ghost btn-xl" onclick="openPricing()">View plans</button>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-n">2M+</div><div class="stat-l">Active users</div></div>
+      <div class="stat"><div class="stat-n">99.9%</div><div class="stat-l">Uptime</div></div>
+      <div class="stat"><div class="stat-n">180+</div><div class="stat-l">Countries</div></div>
+    </div>
+    <div class="hero-preview">
+      <div class="preview-bar">
+        <div class="dot" style="background:#ff5f57"></div>
+        <div class="dot" style="background:#febc2e"></div>
+        <div class="dot" style="background:#28c840"></div>
+        <span style="font-size:.8rem;color:var(--text3);margin-left:.5rem">Kyro — New chat</span>
+      </div>
+      <div class="preview-msgs">
+        <div class="preview-msg" style="animation-delay:.1s">
+          <div class="avatar av-user">U</div>
+          <div class="msg-bubble user-msg">Explain quantum computing in simple terms and give me a real-world analogy.</div>
+        </div>
+        <div class="preview-msg" style="animation-delay:.4s">
+          <div class="avatar av-ai">N</div>
+          <div class="msg-bubble">Think of a classical computer like a librarian who checks one book at a time to find information. A quantum computer is like a librarian who can check <strong>all books simultaneously</strong> — using quantum superposition and entanglement to explore millions of paths at once. This makes certain problems (like drug discovery or cryptography) exponentially faster to solve. ✨</div>
+        </div>
+        <div class="preview-msg" style="animation-delay:.7s">
+          <div class="avatar av-user">U</div>
+          <div class="msg-bubble user-msg">Write me a Python function that demonstrates this concept.</div>
+        </div>
+        <div class="preview-msg" style="animation-delay:1s">
+          <div class="avatar av-ai">N</div>
+          <div class="msg-bubble">
+            <div class="typing"><span></span><span></span><span></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="section" id="features">
+    <div class="section-label">Capabilities</div>
+    <div class="section-title">Everything you need to<br>think smarter</div>
+    <p class="section-sub">From writing to code, research to creativity — Kyro handles it all with precision and context-awareness.</p>
+    <div class="features-grid">
+      <div class="feat-card">
+        <div class="feat-icon fi-blue">⚡</div>
+        <div class="feat-title">Real-time responses</div>
+        <div class="feat-desc">Get instant, streaming answers. No waiting — just fluid conversation that keeps up with your thinking.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon fi-gold">💻</div>
+        <div class="feat-title">Advanced code generation</div>
+        <div class="feat-desc">Debug, write, explain, and refactor code across 50+ programming languages with deep contextual understanding.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon fi-green">📄</div>
+        <div class="feat-title">Document analysis</div>
+        <div class="feat-desc">Upload PDFs, spreadsheets, and docs. Kyro reads, summarizes, and extracts insights in seconds.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon fi-purple">🧠</div>
+        <div class="feat-title">Long-context memory</div>
+        <div class="feat-desc">With 200K token context windows, Kyro retains your entire conversation and project history seamlessly.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon fi-coral">🎨</div>
+        <div class="feat-title">Creative writing</div>
+        <div class="feat-desc">Draft essays, stories, emails, and marketing copy that sounds authentically human, not robotic.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon fi-teal">🔍</div>
+        <div class="feat-title">Web research</div>
+        <div class="feat-desc">Pro users can enable live web search to pull in real-time data, news, and up-to-date information.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section style="background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:6rem 2rem" id="how">
+    <div style="max-width:1100px;margin:0 auto">
+      <div class="section-label" style="text-align:center">How it works</div>
+      <div class="section-title" style="text-align:center">Up and running in<br>under 60 seconds</div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">01</div>
+          <div class="step-title">Create your account</div>
+          <div class="step-desc">Sign up with email or Google. Free plan activates instantly — no credit card required.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">02</div>
+          <div class="step-title">Start a conversation</div>
+          <div class="step-desc">Ask anything. Paste code, upload a document, or just type a question to get started immediately.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">03</div>
+          <div class="step-title">Get smart answers</div>
+          <div class="step-desc">Receive detailed, context-aware responses tailored exactly to what you asked — every single time.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">04</div>
+          <div class="step-title">Upgrade when ready</div>
+          <div class="step-desc">Unlock higher limits, faster models, and pro features at any time — upgrade in one click.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section class="section" id="pricing">
+    <div class="section-label">Pricing</div>
+    <div class="section-title">Simple, transparent pricing</div>
+    <p class="section-sub">Choose the plan that fits your needs. Upgrade or downgrade anytime with no hidden fees.</p>
+    <div class="pricing-grid">
+      <!-- FREE -->
+      <div class="plan-card">
+        <div class="plan-name">Free</div>
+        <div class="plan-price">$0<span>/mo</span></div>
+        <div class="plan-desc">Perfect for getting started and casual use.</div>
+        <ul class="plan-features">
+          <li>20 messages per day</li>
+          <li>Access to Kyro Base model</li>
+          <li>Standard response speed</li>
+          <li>Chat history (7 days)</li>
+          <li class="no">Web search</li>
+          <li class="no">File uploads</li>
+          <li class="no">API access</li>
+        </ul>
+        <button class="btn btn-ghost btn-lg" style="width:100%" onclick="openAuth('signup')">Get started free</button>
+      </div>
+      <!-- PRO -->
+      <div class="plan-card popular">
+        <div class="plan-badge">Most popular</div>
+        <div class="plan-name">Pro</div>
+        <div class="plan-price">$20<span>/mo</span></div>
+        <div class="plan-desc">For power users who need unlimited AI access.</div>
+        <ul class="plan-features">
+          <li>Unlimited messages</li>
+          <li>Access to Kyro Pro (Claude Sonnet)</li>
+          <li>Priority response speed</li>
+          <li>Chat history (unlimited)</li>
+          <li>Live web search</li>
+          <li>File & image uploads</li>
+          <li class="no">API access</li>
+        </ul>
+        <button class="btn btn-primary btn-lg" style="width:100%" onclick="openAuth('signup')">Start Pro — $20/mo</button>
+      </div>
+      <!-- ENTERPRISE -->
+      <div class="plan-card">
+        <div class="plan-name">Enterprise</div>
+        <div class="plan-price">$60<span>/mo</span></div>
+        <div class="plan-desc">For teams and businesses needing full control.</div>
+        <ul class="plan-features">
+          <li>Everything in Pro</li>
+          <li>Access to Kyro Ultra (Claude Opus)</li>
+          <li>Full API access</li>
+          <li>Custom system prompts</li>
+          <li>Team collaboration tools</li>
+          <li>Priority support & SLA</li>
+          <li>SSO & admin controls</li>
+        </ul>
+        <button class="btn btn-gold btn-lg" style="width:100%" onclick="openAuth('signup')">Contact sales</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="cta-glow"></div>
+    <div class="cta-inner">
+      <div class="section-title">Ready to think smarter?</div>
+      <p style="color:var(--text2);font-size:1.05rem;margin:1rem 0 2rem;font-weight:300">Join over 2 million users who use Kyro every day to write, code, learn, and create.</p>
+      <button class="btn btn-primary btn-xl" onclick="openAuth('signup')">Start for free — no credit card</button>
+    </div>
+  </section>
+
+  <footer>
+    <p style="margin-bottom:.5rem">© 2025 Kyro Inc. · <a href="#">Privacy</a> · <a href="#">Terms</a> · <a href="#">Status</a></p>
+    <p>Built with ❤️ using Claude Sonnet API</p>
+  </footer>
+</div>
+
+<!-- CHAT VIEW -->
+<div id="chat-view" class="view">
+  <div class="chat-layout">
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="sidebar-head">
+        <button class="new-chat-btn" onclick="newChat()">
+          <span>✏</span> New chat
+        </button>
+      </div>
+      <div class="sidebar-body" id="chat-history">
+        <div style="font-size:.75rem;color:var(--text3);padding:.5rem .75rem;text-transform:uppercase;letter-spacing:.08em">Today</div>
+      </div>
+      <div class="sidebar-foot">
+        <div class="user-info">
+          <div class="user-avatar" id="nav-avatar">U</div>
+          <div class="user-meta">
+            <div class="user-name" id="nav-name">User</div>
+            <div class="user-plan" id="nav-plan">Free plan</div>
+          </div>
+          <button class="upgrade-btn-small" onclick="openPricing()">Upgrade</button>
+        </div>
+      </div>
+    </div>
+    <!-- MAIN -->
+    <div class="chat-main">
+      <div class="chat-header">
+        <div class="model-selector">
+          <div class="model-dot"></div>
+          <span id="model-label">Kyro Base</span>
+          <span style="color:var(--text3)">▾</span>
+        </div>
+        <div style="display:flex;gap:.75rem;align-items:center">
+          <button class="btn btn-ghost" onclick="showLanding()" style="font-size:.8rem;padding:.4rem .9rem">← Home</button>
+          <button class="btn btn-gold" onclick="openPricing()" style="font-size:.8rem;padding:.4rem .9rem" id="upgrade-header-btn">⬆ Upgrade</button>
+        </div>
+      </div>
+      <div id="messages-container" class="chat-messages" style="display:none"></div>
+      <div id="welcome-screen" class="welcome-screen">
+        <div class="welcome-logo">Kyro</div>
+        <div class="welcome-sub">What would you like to explore today?</div>
+        <div class="suggestions">
+          <div class="suggestion-card" onclick="useSuggestion('Explain machine learning in simple terms with a practical example')">
+            <div class="sug-title">🧠 Explain machine learning</div>
+            <div class="sug-desc">Simple terms with examples</div>
+          </div>
+          <div class="suggestion-card" onclick="useSuggestion('Write a Python function to analyze CSV data and generate a summary report')">
+            <div class="sug-title">💻 Write Python code</div>
+            <div class="sug-desc">Analyze CSV data automatically</div>
+          </div>
+          <div class="suggestion-card" onclick="useSuggestion('Help me write a compelling product description for a new SaaS tool')">
+            <div class="sug-title">✍️ Write product copy</div>
+            <div class="sug-desc">Compelling SaaS descriptions</div>
+          </div>
+          <div class="suggestion-card" onclick="useSuggestion('What are the best strategies for growing a startup from 0 to 1000 customers?')">
+            <div class="sug-title">🚀 Startup growth tips</div>
+            <div class="sug-desc">From 0 to 1000 customers</div>
+          </div>
+        </div>
+      </div>
+      <div class="chat-input-area">
+        <div class="input-wrapper">
+          <textarea class="input-box" id="chat-input" placeholder="Message Kyro…" rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+          <button class="send-btn" id="send-btn" onclick="sendMessage()">
+            <svg class="send-icon" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+        </div>
+        <div class="input-meta">
+          <span class="input-hint">Enter to send · Shift+Enter for newline</span>
+          <span class="limit-indicator" id="msg-limit">20 messages left today</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal-overlay" id="auth-modal">
+  <div class="modal auth-modal">
+    <div class="modal-head">
+      <div>
+        <div style="font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:700">Welcome to Kyro</div>
+        <div style="color:var(--text2);font-size:.9rem;margin-top:.25rem">The AI that understands you</div>
+      </div>
+      <button class="modal-close" onclick="closeModal('auth-modal')">✕</button>
+    </div>
+    <div class="auth-tabs">
+      <div class="auth-tab active" id="tab-login" onclick="switchTab('login')">Log in</div>
+      <div class="auth-tab" id="tab-signup" onclick="switchTab('signup')">Sign up</div>
+    </div>
+    <div class="auth-form">
+      <div class="form-group" id="name-field" style="display:none">
+        <label class="form-label">Full name</label>
+        <input class="form-input" id="auth-name" type="text" placeholder="Your name"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email address</label>
+        <input class="form-input" id="auth-email" type="email" placeholder="you@example.com"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input class="form-input" id="auth-pass" type="password" placeholder="••••••••"/>
+      </div>
+      <button class="btn btn-primary btn-lg" style="width:100%" id="auth-submit-btn" onclick="handleAuth()">Log in</button>
+      <div class="divider">or continue with</div>
+      <button class="social-btn" onclick="handleSocialAuth()">
+        <svg width="18" height="18" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+        Continue with Google
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- PRICING MODAL -->
+<div class="modal-overlay" id="pricing-modal">
+  <div class="modal" style="max-width:950px">
+    <div class="modal-head">
+      <div>
+        <div style="font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:700">Upgrade your plan</div>
+        <div style="color:var(--text2);font-size:.9rem;margin-top:.25rem">Unlock unlimited AI power</div>
+      </div>
+      <button class="modal-close" onclick="closeModal('pricing-modal')">✕</button>
+    </div>
+    <div class="pricing-grid">
+      <div class="plan-card">
+        <div class="plan-name">Free</div>
+        <div class="plan-price">$0<span>/mo</span></div>
+        <div class="plan-desc">For casual exploration.</div>
+        <ul class="plan-features">
+          <li>20 messages / day</li>
+          <li>Kyro Base model</li>
+          <li>7-day history</li>
+          <li class="no">Web search</li>
+          <li class="no">File uploads</li>
+        </ul>
+        <button class="btn btn-ghost btn-lg" style="width:100%" onclick="selectPlan('free')">Current plan</button>
+      </div>
+      <div class="plan-card popular">
+        <div class="plan-badge">Most popular</div>
+        <div class="plan-name">Pro</div>
+        <div class="plan-price">$20<span>/mo</span></div>
+        <div class="plan-desc">Unlimited AI, every day.</div>
+        <ul class="plan-features">
+          <li>Unlimited messages</li>
+          <li>Kyro Pro (Claude Sonnet)</li>
+          <li>Unlimited history</li>
+          <li>Web search</li>
+          <li>File uploads</li>
+        </ul>
+        <button class="btn btn-primary btn-lg" style="width:100%" onclick="selectPlan('pro')">Upgrade to Pro →</button>
+      </div>
+      <div class="plan-card">
+        <div class="plan-name">Enterprise</div>
+        <div class="plan-price">$60<span>/mo</span></div>
+        <div class="plan-desc">Full power for teams.</div>
+        <ul class="plan-features">
+          <li>Everything in Pro</li>
+          <li>Kyro Ultra (Claude Opus)</li>
+          <li>API access</li>
+          <li>Team tools & SSO</li>
+          <li>Priority support</li>
+        </ul>
+        <button class="btn btn-gold btn-lg" style="width:100%" onclick="selectPlan('enterprise')">Get Enterprise →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── GROQ API KEY ──
+let GROQ_API_KEY = 'server-side';
+
+// ── STATE ──
+let currentUser = null;
+let currentPlan = 'free';
+let messages = [];
+let chatHistory = [];
+let messagesLeft = 20;
+let isTyping = false;
+let currentTab = 'login';
+
+// ── NAVIGATION ──
+function showView(id) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  const el = document.getElementById(id);
+  el.classList.add('active');
+}
+function showLanding() { showView('landing'); }
+function showChat() { showView('chat-view'); }
+
+// ── AUTH ──
+function openAuth(tab = 'login') {
+  openModal('auth-modal');
+  switchTab(tab);
+}
+function switchTab(tab) {
+  currentTab = tab;
+  document.getElementById('tab-login').classList.toggle('active', tab === 'login');
+  document.getElementById('tab-signup').classList.toggle('active', tab === 'signup');
+  document.getElementById('name-field').style.display = tab === 'signup' ? 'flex' : 'none';
+  document.getElementById('auth-submit-btn').textContent = tab === 'login' ? 'Log in' : 'Create account';
+}
+function handleAuth() {
+  const email = document.getElementById('auth-email').value.trim();
+  const name = document.getElementById('auth-name').value.trim();
+  if (!email) { alert('Please enter your email.'); return; }
+  const displayName = name || email.split('@')[0];
+  loginUser(displayName, email);
+}
+function handleSocialAuth() {
+  loginUser('Alex Chen', 'alex@example.com');
+}
+function loginUser(name, email) {
+  currentUser = { name, email };
+  document.getElementById('nav-avatar').textContent = name[0].toUpperCase();
+  document.getElementById('nav-name').textContent = name;
+  document.getElementById('nav-plan').textContent = currentPlan === 'free' ? 'Free plan' : currentPlan === 'pro' ? 'Pro plan ⚡' : 'Enterprise 🏢';
+  closeModal('auth-modal');
+  showChat();
+  updateLimitDisplay();
+}
+
+// ── PRICING ──
+function openPricing() { openModal('pricing-modal'); }
+function selectPlan(plan) {
+  if (!currentUser) {
+    closeModal('pricing-modal');
+    openAuth('signup');
+    return;
+  }
+  if (plan === 'free') { closeModal('pricing-modal'); return; }
+  currentPlan = plan;
+  messagesLeft = plan === 'pro' ? Infinity : 20;
+  document.getElementById('nav-plan').textContent = plan === 'pro' ? 'Pro plan ⚡' : 'Enterprise 🏢';
+  document.getElementById('model-label').textContent = plan === 'pro' ? 'Kyro Pro' : 'Kyro Ultra';
+  const upgradeBtn = document.getElementById('upgrade-header-btn');
+  if (plan !== 'free') upgradeBtn.style.display = 'none';
+  closeModal('pricing-modal');
+  updateLimitDisplay();
+  addSystemNotification(`🎉 You're now on the ${plan.charAt(0).toUpperCase() + plan.slice(1)} plan! Enjoy ${plan === 'pro' ? 'unlimited messages and web search' : 'full enterprise features'}.`);
+}
+
+// ── MODAL ──
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.modal-overlay').forEach(o => o.addEventListener('click', function(e) {
+  if (e.target === this) this.classList.remove('open');
+}));
+
+// ── CHAT ──
+function newChat() {
+  messages = [];
+  const container = document.getElementById('messages-container');
+  container.innerHTML = '';
+  container.style.display = 'none';
+  document.getElementById('welcome-screen').style.display = 'flex';
+  document.getElementById('chat-input').focus();
+}
+
+function useSuggestion(text) {
+  document.getElementById('chat-input').value = text;
+  sendMessage();
+}
+
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+}
+
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 200) + 'px';
+}
+
+function updateLimitDisplay() {
+  const el = document.getElementById('msg-limit');
+  if (currentPlan !== 'free') {
+    el.textContent = 'Unlimited messages';
+    el.className = 'limit-indicator';
+  } else {
+    el.textContent = `${messagesLeft} messages left today`;
+    el.className = 'limit-indicator' + (messagesLeft <= 5 ? ' danger' : messagesLeft <= 10 ? ' warn' : '');
+  }
+}
+
+function addSystemNotification(text) {
+  const container = document.getElementById('messages-container');
+  const div = document.createElement('div');
+  div.style.cssText = 'text-align:center;font-size:.8rem;color:var(--success);padding:.5rem 1rem;background:var(--success)11;border-radius:99px;margin:0 auto;border:1px solid var(--success)33;width:fit-content';
+  div.textContent = text;
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+}
+
+function renderMessage(role, content) {
+  const container = document.getElementById('messages-container');
+  container.style.display = 'flex';
+  document.getElementById('welcome-screen').style.display = 'none';
+  const row = document.createElement('div');
+  row.className = `msg-row ${role}`;
+  const initials = role === 'ai' ? 'N' : (currentUser ? currentUser.name[0].toUpperCase() : 'U');
+  row.innerHTML = `
+    <div class="msg-av ${role}">${initials}</div>
+    <div class="msg-content">
+      <div class="msg-sender">${role === 'ai' ? 'Kyro' : (currentUser ? currentUser.name : 'You')}</div>
+      <div class="msg-text">${escapeHtml(content)}</div>
+      ${role === 'ai' ? `<div class="msg-actions"><button class="msg-action-btn" onclick="copyMsg(this)">📋 Copy</button></div>` : ''}
+    </div>`;
+  container.appendChild(row);
+  container.scrollTop = container.scrollHeight;
+  return row;
+}
+
+function showTyping() {
+  const container = document.getElementById('messages-container');
+  container.style.display = 'flex';
+  document.getElementById('welcome-screen').style.display = 'none';
+  const row = document.createElement('div');
+  row.className = 'msg-row ai';
+  row.id = 'typing-row';
+  row.innerHTML = `<div class="msg-av ai">N</div><div class="msg-content"><div class="msg-sender">Kyro</div><div class="msg-text"><div class="typing-indicator"><span></span><span></span><span></span></div></div></div>`;
+  container.appendChild(row);
+  container.scrollTop = container.scrollHeight;
+}
+
+function removeTyping() {
+  const el = document.getElementById('typing-row');
+  if (el) el.remove();
+}
+
+function addToHistory(text) {
+  const hist = document.getElementById('chat-history');
+  const item = document.createElement('div');
+  item.className = 'chat-history-item active';
+  item.textContent = text.length > 35 ? text.slice(0, 35) + '…' : text;
+  hist.querySelectorAll('.chat-history-item').forEach(i => i.classList.remove('active'));
+  hist.appendChild(item);
+}
+
+async function sendMessage() {
+  if (isTyping) return;
+  const input = document.getElementById('chat-input');
+  const text = input.value.trim();
+  if (!text) return;
+
+  if (!currentUser) {
+    openAuth('signup');
+    return;
+  }
+
+  if (currentPlan === 'free' && messagesLeft <= 0) {
+    openPricing();
+    return;
+  }
+
+  input.value = '';
+  input.style.height = 'auto';
+  isTyping = true;
+  document.getElementById('send-btn').disabled = true;
+
+  if (currentPlan === 'free') {
+    messagesLeft--;
+    updateLimitDisplay();
+  }
+
+  messages.push({ role: 'user', content: text });
+  renderMessage('user', text);
+
+  if (messages.length === 1) addToHistory(text);
+
+  showTyping();
+
+  try {
+    const res = await fetch('/.netlify/functions/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages })
+    });
+    const data = await res.json();
+    removeTyping();
+    if (data.error) { renderMessage('ai', `⚠️ Error: ${data.error}`); isTyping=false; document.getElementById('send-btn').disabled=false; return; }
+    const reply = data.reply || 'Sorry, I had trouble responding. Please try again.';
+    messages.push({ role: 'assistant', content: reply });
+    renderMessage('ai', reply);
+  } catch (err) {
+    removeTyping();
+    renderMessage('ai', '⚠️ Something went wrong. Please try again.');
+  }
+
+  isTyping = false;
+  document.getElementById('send-btn').disabled = false;
+  document.getElementById('chat-input').focus();
+}
+
+function copyMsg(btn) {
+  const text = btn.closest('.msg-content').querySelector('.msg-text').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = '✅ Copied!';
+    setTimeout(() => btn.textContent = '📋 Copy', 2000);
+  });
+}
+
+function escapeHtml(text) {
+  return text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── SCROLL REVEAL ──
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.style.opacity = '1';
+      e.target.style.transform = 'translateY(0)';
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.feat-card, .plan-card, .step').forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(20px)';
+  el.style.transition = 'opacity .5s ease, transform .5s ease';
+  observer.observe(el);
+});
+</script>
+</body>
+</html>
